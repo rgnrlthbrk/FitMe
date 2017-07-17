@@ -13,8 +13,7 @@ mongoose.connect(process.env.DB_URI);
 // parse application/json
 let express = require('express'),
     app     = express(),
-    morgan  = require('morgan'),
-    jwt    = require('jsonwebtoken');
+    morgan  = require('morgan');
 app.set('superSecret', process.env.SECRET);
 
 app.use(morgan('dev'));

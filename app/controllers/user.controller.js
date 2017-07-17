@@ -13,7 +13,6 @@ module.exports = {
   },
   addUser  : (req, res) => {
     let thisDate = Date.getCurrentDate();
-    console.log('Today: ' + thisDate);
     let entry = new User({
       name           : req.body.name,
       password       : req.body.password,
