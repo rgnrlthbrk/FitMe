@@ -1,33 +1,31 @@
-import homeTemplate from "../../views/home.htm!text";
-import loginTemplate from "../../views/home.htm!text";
-//import loginTemplate from "../../views/login.htm!text";
-import userTemplate from "../../views/user.htm!text";
+import "./routestImports"
 
-import "../controllers/_main/MainController";
-import "../controllers/login/LoginController";
-import "../controllers/user/UserController";
-
-angular.module("appRoutes", [ "ui.router", "LoginController", "MainController", "UserController" ])
+angular.module("appRoutes", [ "routesImports" ])
   .config(($stateProvider, $urlRouterProvider, $locationProvider) => {
-    $stateProvider
-      .state('Home', {
-        url        : '/',
-        template   : homeTemplate,
-        controller : 'MainController'
-      })
-      .state('Login', {
-        url        : '/login',
-        template   : loginTemplate,
-        controller : 'LoginController'
-      })
-      .state('Users', {
-        url        : '/users',
-        template   : userTemplate,
-        controller : 'UserController'
-      });
-
     $urlRouterProvider
-      .otherwise('/login');
+      .otherwise('/user');
+
+    $stateProvider
+      .state('home', {
+        url        : '/',
+        template : '<home-page-directive></home-page-directive>'
+      })
+      .state('user', {
+        url : '/user',
+        template : '<bar-user-directive></bar-user-directive>'
+      })
+      .state('user.login', {
+        url      : '/login',
+        template : '<login-directive></login-directive>'
+      })
+      .state('user.registration', {
+        url      : '/registration',
+        template : '<registration-directive></registration-directive>'
+      })
+      .state('users', {
+        url      : '/users',
+        template : '<user-directive></user-directive>'
+      });
 
     $locationProvider
       .html5Mode({

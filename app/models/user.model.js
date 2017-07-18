@@ -4,6 +4,7 @@ let mongoose = require('mongoose'),
 let userSchema = new Schema({
   name: String,
   password: String,
+  email: String,
   authorisations: {},
   creationDate: String
 });

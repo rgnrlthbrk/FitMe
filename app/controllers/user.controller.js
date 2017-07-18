@@ -16,6 +16,7 @@ module.exports = {
     let entry = new User({
       name           : req.body.name,
       password       : req.body.password,
+      email          : req.body.email,
       authorisations : req.body.authorisations,
       creationDate   : thisDate
     });

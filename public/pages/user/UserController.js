@@ -1,4 +1,4 @@
-import "../../services/user/UserService";
+import "./UserService";
 
 angular.module('UserController', [ 'UserService' ])
   .controller('UserController', [ '$scope', '$http', 'User', function ($scope, $http, User) {
@@ -6,11 +6,9 @@ angular.module('UserController', [ 'UserService' ])
 
     User.get()
       .then(function (response) {
-        console.log('OK');
-        //$scope.lolo = Object.values(response.data);
+        $scope.lolo = response.data;
       }, function (response) {
-        console.log('NOT OK');
+        console.log('NOK!!!');
         return response;
       });
-
   } ]);
