@@ -16,16 +16,14 @@ module.exports = {
     let entry = new User({
       name           : req.body.name,
       password       : req.body.password,
-      admin          : req.body.admin,
       authorisations : req.body.authorisations,
       creationDate   : thisDate
     });
 
-    // save the sample user
     entry.save((err) => {
-      if (err)
+      if (err) {
         throw err;
-
+      }
       console.log('User saved successfully');
       res.json({message : entry.name + ' created!'});
     });

@@ -18,7 +18,7 @@ System.config({
     "angular": "github:angular/bower-angular@1.6.5",
     "angular-mocks": "github:angular/bower-angular-mocks@1.6.5",
     "angular-route": "github:angular/bower-angular-route@1.6.5",
-    "angular-ui-router": "github:angular-ui/angular-ui-router-bower@1.0.5",
+    "angular-ui-router": "npm:angular-ui-router@0.4.2",
     "animate.css": "github:daneden/animate.css@3.5.2",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
@@ -62,6 +62,10 @@ System.config({
     },
     "github:twbs/bootstrap@3.3.7": {
       "jquery": "npm:jquery@3.2.1"
+    },
+    "npm:angular-ui-router@0.4.2": {
+      "angular": "npm:angular@1.6.5",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:assert@1.4.1": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",

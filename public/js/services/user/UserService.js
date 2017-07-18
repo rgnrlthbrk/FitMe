@@ -8,16 +8,16 @@ angular.module('UserService', [])
 
     function getAllUsers() {
 
-      return $http.get('/api/users');
+      return $http.get('/users');
     }
 
     function createSingleUser() {
 
-      return $http.post('/api/users', {});
+      return $http.post('/users', {});
     }
 
     function removeSingleUser(id) {
 
-      return $http.delete('/api/users/' + id);
+      return $http.delete('/users/' + id);
     }
   } ]);

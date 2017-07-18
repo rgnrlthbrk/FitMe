@@ -13,10 +13,13 @@ mongoose.connect(process.env.DB_URI);
 // parse application/json
 let express = require('express'),
     app     = express(),
-    morgan  = require('morgan');
+    morgan  = require('morgan'),
+    favicon = require('serve-favicon'),
+    path = require('path');
 app.set('superSecret', process.env.SECRET);
 
 app.use(morgan('dev'));
+app.use(favicon(path.join(__dirname, 'public/pics', 'FitMe.ico')))
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());

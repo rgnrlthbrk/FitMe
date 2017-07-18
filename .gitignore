@@ -52,3 +52,5 @@ public/jspm_packages/*
 .idea/*
 public/libs/*
 *.bat
+*.log
+*.xmind

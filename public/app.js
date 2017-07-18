@@ -1,17 +1,12 @@
 import "ngDraggable";
 import "bootstrap";
-import "angular-route";
+import "angular-ui-router";
 
 import "js/routes/appRoutes";
 
-import "js/controllers/_main_ctrl/MainCtrl";
-import "js/controllers/user_ctrl/UserCtrl";
-
-import "js/services/UserService";
-
 angular.module("sampleApp", [
-  "MainCtrl", "UserCtrl",
-  "UserService",
+  //"MainController", "UserController", "LogicController",
+  //"UserService",
   "appRoutes"
 ]);
 

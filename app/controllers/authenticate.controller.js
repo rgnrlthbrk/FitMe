@@ -1,9 +1,8 @@
 let User = require('../models/user.model'),
-    jwt  = require('jsonwebtoken'),
-    app  = require('express')();
+    jwt  = require('jsonwebtoken');
 
 module.exports = {
-  userAthenticate : (req, res) => {
+  userLogin : (req, res) => {
     User.findOne({
       name : req.body.name
     }, (err, user) => {
@@ -46,11 +45,7 @@ module.exports = {
           next();
         }
       });
-
     } else {
-
-      // if there is no token
-      // return an error
       return res.status(403).send({
         success : false,
         message : 'No token provided.'
