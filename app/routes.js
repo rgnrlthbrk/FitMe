@@ -7,12 +7,15 @@ let router    = require('express').Router(),
 module.exports = router;
 
 let unauthorizedPathsArr = [
-  '/login'
-  ,'/users'
-  ,'/registration'
+  ''
+  ,'/user/login'
+  //,'/users'
+  //,'/registration'
 ];
 
-//router.use(routeUtil.unless(unauthorizedPathsArr, authCtrl.verifyToken));
+
+
+router.use(routeUtil.unless(unauthorizedPathsArr, authCtrl.verifyToken));
 
 router.route('/api/authenticate')
   .post(userCtrl.addUser);

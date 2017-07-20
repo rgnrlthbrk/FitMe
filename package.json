@@ -24,7 +24,6 @@
     "method-override": "^2.3.8",
     "mongodb": "^2.2.26",
     "mongoose": "^4.10.0",
-    "nodemon": "^1.11.0",
     "path": "^0.12.7",
     "serve-favicon": "^2.4.3"
   },
@@ -40,44 +39,6 @@
     "karma-junit-reporter": "^1.2.0",
     "morgan": "^1.8.2",
     "nodemon": "^1.11.0"
-  },
-  "jspm": {
-    "directories": {
-      "baseURL": "public"
-    },
-    "dependencies": {
-      "angular": "github:angular/bower-angular@^1.6.5",
-      "angular-mocks": "github:angular/bower-angular-mocks@^1.6.5",
-      "angular-route": "github:angular/bower-angular-route@^1.6.5",
-      "angular-ui-router": "npm:angular-ui-router@^0.4.2",
-      "animate.css": "github:daneden/animate.css@^3.5.2",
-      "bootstrap": "github:twbs/bootstrap@^3.3.7",
-      "css": "github:systemjs/plugin-css@^0.1.35",
-      "font-awesome": "npm:font-awesome@^4.7.0",
-      "image": "github:systemjs/plugin-image@^0.1.0",
-      "marked": "npm:marked@^0.3.6",
-      "ngDraggable": "github:fatlinesofcode/ngDraggable@^0.1.8",
-      "text": "github:systemjs/plugin-text@^0.0.11",
-      "traceur": "github:jmcriffey/bower-traceur@^0.0.111",
-      "underscore": "npm:underscore@^1.8.3"
-    },
-    "devDependencies": {
-      "babel": "npm:babel-core@^5.8.24",
-      "babel-runtime": "npm:babel-runtime@^5.8.24",
-      "core-js": "npm:core-js@^1.1.4"
-    },
-    "overrides": {
-      "github:fatlinesofcode/ngDraggable@0.1.8": {
-        "dependencies": {
-          "angular": "jspm:angular@1.6.5"
-        },
-        "shim": {
-          "ngDraggable": [
-            "angular"
-          ]
-        }
-      }
-    }
   },
   "bugs": {
     "url": "https://github.com/rgnrlthbrk/FitMe/issues"

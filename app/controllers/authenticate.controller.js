@@ -1,5 +1,6 @@
 let User = require('../models/user.model'),
-    jwt  = require('jsonwebtoken');
+    jwt  = require('jsonwebtoken'),
+    path = require('path');
 
 module.exports = {
   userLogin : (req, res) => {
@@ -50,7 +51,6 @@ module.exports = {
         success : false,
         message : 'No token provided.'
       });
-
     }
   }
 };
