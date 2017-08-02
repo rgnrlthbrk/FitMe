@@ -3,11 +3,10 @@ let User = require('../models/user.model'),
     path = require('path');
 
 module.exports = {
-  userLogin : (req, res) => {
+  userLogin   : (req, res) => {
     User.findOne({
       name : req.body.name
     }, (err, user) => {
-
       if (err)
         throw err;
 
@@ -29,12 +28,10 @@ module.exports = {
             token   : token
           });
         }
-
       }
-
     });
   },
-  verifyToken     : (req, res, next) => {
+  verifyToken : (req, res, next) => {
     let token = req.body.token || req.query.token || req.headers[ 'x-access-token' ];
     if (token) {
       let secret = process.env.SECRET;

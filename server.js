@@ -19,7 +19,7 @@ let express = require('express'),
 app.set('superSecret', process.env.SECRET);
 
 app.use(morgan('dev'));
-app.use(favicon(path.join(__dirname, 'public/pics', 'FitMe.ico')))
+app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')))
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -35,7 +35,7 @@ let methodOverride = require('method-override');
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // set the static files location
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/dist'));
 
 // routes
 let router = require('./app/routes');
