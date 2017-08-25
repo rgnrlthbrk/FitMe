@@ -19,7 +19,7 @@ let express = require('express'),
 app.set('superSecret', process.env.SECRET);
 
 app.use(morgan('dev'));
-app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')))
+//app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')))
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());

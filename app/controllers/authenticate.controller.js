@@ -4,11 +4,19 @@ let User = require('../models/user.model'),
 
 module.exports = {
   userLogin   : (req, res) => {
+
+    if (!req.body.username) {
+      res.json({success : false, message : 'Authentication failed. User not found!'});
+      return;
+    }
+
     User.findOne({
-      name : req.body.name
+      'username' : req.body.username
     }, (err, user) => {
-      if (err)
+      if (err) {
+        console.log(err);
         throw err;
+      }
 
       if (!user) {
         res.json({success : false, message : 'Authentication failed. User not found.'});

@@ -8,23 +8,24 @@ module.exports = router;
 
 let unauthorizedPathsArr = [
   ''
-  ,'/user/login'
-  //,'/users'
-  //,'/registration'
+  ,'/home'
+  ,'/login'
+  ,'/registration'
 ];
-
-
 
 router.use(routeUtil.unless(unauthorizedPathsArr, authCtrl.verifyToken));
 
-router.route('/api/authenticate')
-  .post(userCtrl.addUser);
-
+// authCtrl
 router.route('/login')
   .post(authCtrl.userLogin);
 
-router.route('/users')
+// userCtrl
+router.route('/registration')
+  .post(userCtrl.addUser);
+
+router.route('/user')
   .get(userCtrl.showUser);
 
+// mainCtrl
 router.route('*')
   .get(mainCtrl.getAll);
