@@ -6,7 +6,7 @@ let port = process.env.PORT || 8181;
 // connect to our mongoDB database
 let MongoClient = require('mongodb').MongoClient,
     mongoose    = require('mongoose');
-mongoose.connect(process.env.DB_URI);
+mongoose.connect(process.env.DB_URI, { config: { autoIndex: false } });
 //MongoClient.connect(process.env.DB_URI);
 
 // get all data/stuff of the body (POST) parameters

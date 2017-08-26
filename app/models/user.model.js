@@ -5,7 +5,7 @@ let userSchema = new Schema({
   username: String,
   password: String,
   email: String,
-  authorisations: {},
+  authorisations: [{ authorisation: String}],
   creationDate: String
 });
 

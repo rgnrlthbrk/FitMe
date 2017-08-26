@@ -1,6 +1,7 @@
 let User = require('../models/user.model'),
     jwt  = require('jsonwebtoken'),
-    path = require('path');
+    path = require('path'),
+    passwordHash = require('password-hash');
 
 module.exports = {
   userLogin   : (req, res) => {
@@ -21,8 +22,7 @@ module.exports = {
       if (!user) {
         res.json({success : false, message : 'Authentication failed. User not found.'});
       } else if (user) {
-
-        if (user.password != req.body.password) {
+        if (!passwordHash.verify(req.body.password, user.password)) {
           res.json({success : false, message : 'Authentication failed. Wrong password.'});
         } else {
           let secret = process.env.SECRET;
