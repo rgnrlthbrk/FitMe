@@ -10,7 +10,10 @@ let unauthorizedPathsArr = [
   ''
   ,'/home'
   ,'/login'
+  ,'/logout'
   ,'/registration'
+  //,'/user'
+  //,'/user/:username'
 ];
 
 router.use(routeUtil.unless(unauthorizedPathsArr, authCtrl.verifyToken));
@@ -24,7 +27,15 @@ router.route('/registration')
   .post(userCtrl.addUser);
 
 router.route('/user')
-  .get(userCtrl.showUser);
+  .get(userCtrl.showUserData);
+
+router.route('/user')
+  .post(userCtrl.submitUserData)
+
+router.route('/user')
+  .put(userCtrl.editUserData);
+
+
 
 // mainCtrl
 router.route('*')
