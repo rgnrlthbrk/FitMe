@@ -12,6 +12,7 @@ let unauthorizedPathsArr = [
   ,'/login'
   ,'/logout'
   ,'/registration'
+  ,'/fitme'
   //,'/user'
   //,'/user/:username'
 ];
@@ -35,8 +36,9 @@ router.route('/user')
 router.route('/user')
   .put(userCtrl.editUserData);
 
-
-
 // mainCtrl
+router.route('/fitme')
+  .get(mainCtrl.getFitme);
+
 router.route('*')
   .get(mainCtrl.getAll);
