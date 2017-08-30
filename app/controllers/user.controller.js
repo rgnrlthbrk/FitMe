@@ -56,7 +56,7 @@ module.exports = {
   },
   showUserData   : (req, res) => {
     console.log('showUserData');
-    console.log(req.header('username'))
+    console.log(req.header('username'));
     UserData.findOne({
       username : req.header('username')
     }, (err, userData) => {
@@ -74,21 +74,21 @@ module.exports = {
   },
   editUserData   : (req, res) => {
     console.log('editUserData');
-
+    const username = req.body.username || req.header('username');
     UserData.findOneAndUpdate({
-        username : req.body.username
+        username : username
       },
       {
-        $set : request(req)
+        $set : request(req, username)
       },
       {upsert : true},
-      function (err, UserData) {
+      function (err) {
         if (err) {
-          res.send(err);
+          res.status(403).send(err);
         } else {
-          res.status(204).send({
+          res.status(200).send({
             success : true,
-            message : 'User data updated correctly.'
+            message : 'User data updated correctly!'
           });
         }
       });
@@ -96,7 +96,7 @@ module.exports = {
   submitUserData : (req, res) => {
     console.log('submitUserData');
     User.findOne({
-      username : req.body.username || req.header('username'),
+      username : req.body.username || req.header('username')
     }, (err, user) => {
       if (err) {
         console.log('Error: ' + err);
@@ -124,20 +124,22 @@ module.exports = {
           } else {
 
             let entry = new UserData({
-              username : req.body.username || req.header('username'),
-              age      : req.body.age,
-              height   : req.body.height,
-              kilos    : req.body.kilos,
-              sex      : req.body.sex,
-              goals    : req.body.goals,
-              period   : req.body.period,
-              allergic : req.body.allergic
+              username       : req.body.username || req.header('username'),
+              age            : req.body.age,
+              height         : req.body.height,
+              kilos          : req.body.kilos,
+              sex            : req.body.sex,
+              goals          : req.body.goals,
+              activity       : req.body.activity,
+              activityPeriod : req.body.activityPeriod,
+              period         : req.body.period,
+              allergic       : req.body.allergic
             });
             entry.save((err) => {
               if (err) {
                 throw err;
               }
-              res.json({message : entry.username + ' has been populated with data!'});
+              res.json({message : 'User ' + entry.username + ' has been populated with data!'});
             });
           }
         });
@@ -146,15 +148,16 @@ module.exports = {
   }
 };
 
-function request(req) {
+function request(req, username) {
   console.log('request');
   console.log(req.body);
   let object = {};
-  for(let key in req.body) {
-    if(req.body.hasOwnProperty(key)){
+  object[ 'username' ] = username;
+  for (let key in req.body) {
+    if (req.body.hasOwnProperty(key)) {
       if ('token' !== key || 'username' !== key) {
-        if (req.body[key]) {
-          object[key] = req.body[key];
+        if (req.body[ key ]) {
+          object[ key ] = req.body[ key ];
         }
       }
     }
