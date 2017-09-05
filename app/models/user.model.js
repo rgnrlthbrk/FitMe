@@ -28,6 +28,6 @@ let userSchema = new Schema({
   }
 });
 
-let User = mongoose.model('fm_users', userSchema, 'fm_users');
+let User = mongoose.model('fm_user', userSchema, 'fm_user');
 
 module.exports = User;

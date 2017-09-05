@@ -24,8 +24,10 @@
     "method-override": "^2.3.8",
     "mongodb": "^2.2.26",
     "mongoose": "^4.10.0",
+    "node-schedule": "^1.2.4",
     "password-hash": "^1.2.2",
     "path": "^0.12.7",
+    "q": "^1.5.0",
     "serve-favicon": "^2.4.3"
   },
   "devDependencies": {

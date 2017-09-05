@@ -52,10 +52,7 @@ module.exports = {
         }
       });
     } else {
-      return res.status(403).send({
-        success : false,
-        message : 'No token provided.'
-      });
+      return res.status(403).redirect('/notfound');
     }
   }
 };

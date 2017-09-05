@@ -2,46 +2,42 @@ let mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
 
 let userDataSchema = new Schema({
-  username       : {
-    type     : String,
-    required : true,
-    unique   : true
+  username:       {
+    type:     String,
+    required: true,
+    unique:   true
   },
-  age            : {
-    type     : Number,
-    required : true
+  age:            {
+    type:     Number,
+    required: true
   },
-  height         : {
-    type     : Number,
-    required : true
+  height:         {
+    type:     Number,
+    required: true
   },
-  kilos          : {
-    type     : Number,
-    required : true
+  kilos:          {
+    type:     Number,
+    required: true
   },
-  sex            : {
-    type     : String,
-    required : true
+  sex:            {
+    type:     String,
+    required: true
   },
-  allergic       : {
-    type     : Array,
-    required : false
+  allergic:       {
+    type:     Array,
+    required: false
   },
-  goals          : {
-    type     : String,
-    required : true
+  goals:          {
+    type:     String,
+    required: true
   },
-  activity       : {
-    type     : String,
-    required : true
+  activityPeriod: {
+    type:     String,
+    required: true
   },
-  activityPeriod : {
-    type     : String,
-    required : true
-  },
-  period         : {
-    type     : String,
-    required : true
+  userCalories:  {
+    type:     Number,
+    required: false
   }
 });
 
