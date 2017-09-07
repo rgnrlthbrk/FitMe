@@ -44,19 +44,17 @@ app.use('/', router);
 // start app
 const schedule = require('node-schedule');
 app.listen(port, () => {
-  schedule.scheduleJob('*/2 * * * *', function () {
+  schedule.scheduleJob('* * * * *', function () {
     let usersCalories = require('./app/utils/usercalories.util');
     usersCalories
       .generateUserDailyCalories()
       .then(() => {
-        let menu = require('./app/utils/generate_menu.util');
-        menu.genenpm rateMenu();
+        let menu = require('./app/utils/menu.util');
+        menu.generateMenu();
       })
       .catch((err) => {
         console.log(err);
       });
-
-    // require('./app/utils/generate_menu.util').generateMenu();
 
   });
   console.log('--- Port ' + port + ' ---');

@@ -35,13 +35,13 @@ let activityPeriod = {
 // 12% cut or gain of the daily meal
 function getTypeOfDiet(diet, AC) {
   if (diet === 'loose') {
-    return AC - AC * 0.12;
+    return AC - AC * 0.13;
   }
   if (diet === 'keep') {
     return AC;
   }
   if (diet === 'gain') {
-    return AC + AC * 0.12;
+    return AC + AC * 0.13;
   }
   console.log('Error fetching data');
   return null;

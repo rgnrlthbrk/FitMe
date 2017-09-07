@@ -38,42 +38,5 @@ module.exports = {
         });
       }
     });
-  },
-  getBreakfast: (req, res) => {
-    Food.find(
-      {
-        'value':
-          {$in: [/^m_/i, /^v_/i, /^rb_/i]},
-        'meal.breakfast' : true
-      },
-      {
-        '_id':       0,
-      },
-      (err, foodArr) => {
-        if (err) {
-          console.log(err);
-          res.json({success: false, message: 'Error!'});
-          throw err;
-        }
-
-
-        foodArr.forEach((food, index) => {
-          console.log(food);
-        });
-
-        if (!foodArr) {
-          res.json({
-            success: false,
-            message: 'No results!',
-            results: null});
-        } else {
-          res.json({
-            success: true,
-            message: 'Your results are ready.',
-            results: foodArr
-          });
-        }
-      });
-
   }
 };

@@ -43,9 +43,6 @@ router.route('/user')
 router.route('/food')
   .post(foodCtrl.addFood);
 
-router.route('/food')
-  .get(foodCtrl.getBreakfast);
-
 // mainCtrl
 router.route('/fitme')
   .get(mainCtrl.getFitme);

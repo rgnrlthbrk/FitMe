@@ -1,5 +1,5 @@
 let user = require('./../queries/user.querie'),
-    rbr_kb = require('./calories.util');
+    ccal = require('./calories.util');
 
 module.exports = {
   generateUserDailyCalories: () => {
@@ -12,7 +12,7 @@ module.exports = {
       .then((userDataArr) => {
         let userCaloriesArr = [];
         userDataArr.forEach((userData) => {
-          let calories = rbr_kb.getCallories(userData);
+          let calories = ccal.getCallories(userData);
           userCaloriesArr.push({
             username: userData.username,
             calories: calories

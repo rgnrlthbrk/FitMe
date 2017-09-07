@@ -1,8 +1,6 @@
-let User     = require('./../models/user.model'),
-    Food     = require('./../models/food.model'),
-    UserData = require('./../models/userdata.model'),
-    calories = require('./../utils/calories.util'),
-    userQ    = require('./../queries/user.querie');
+let userQ = require('./../queries/user.querie'),
+    meal  = require('./../utils/meal.util'),
+    Q     = require('q');
 
 module.exports = {
   generateMenu: () => {
@@ -14,106 +12,27 @@ module.exports = {
       })
       .then((userDataArr) => {
         userDataArr.forEach((userData) => {
-          console.log(userData.username);
-          getBreakfast(userData)
-            .then((result) => {
-              console.log('result');
-              console.log(result);
-            })
-            .catch((err) => console.log(err));
-          console.log('breakfast');
-        })
-          .catch((error) => {
-            console.log('Error: ' + error);
-            throw error;
-          });
+          let obj = {
+            username:  userData.username,
+            breakfast: {},
+            brunch:    {},
+            lunch:     {},
+            snack:     {},
+            dinner:    {}
+          };
 
+          Q.all([
+            meal.getBreakfast(userData),
+            meal.getBrunch(userData),
+            meal.getLunch(userData),
+            meal.getSnack(userData),
+            meal.getDinner(userData)
+          ])
+            .then((result) => {
+              console.log('result:');
+              console.log(result);
+            });
+        });
       });
   }
 };
-
-function getBreakfast(userData) {
-  let allergensList = [];
-  userData['allergic'].forEach((allergen) => {
-    allergensList.push(allergen.value);
-  });
-
-  return Food.find(
-    {
-      'meal.breakfast':  true,
-      'allergens.value': {$in: allergensList}
-    },
-    {'_id': 0, '__v': 0},
-    (err, foods) => {
-      return foods;
-    }
-  );
-}
-
-function getBrunch(userData) {
-  let allergensList = [];
-  userData['allergic'].forEach((allergen) => {
-    allergensList.push(allergen.value);
-  });
-
-  Food.find(
-    {
-      'meal.brunch':     true,
-      'allergens.value': {$in: allergensList}
-    },
-    {'_id': 0, '__v': 0},
-    (err, foods) => {
-    }
-  );
-}
-
-function getLunch(userData) {
-  let allergensList = [];
-  userData['allergic'].forEach((allergen) => {
-    allergensList.push(allergen.value);
-  });
-
-  Food.find(
-    {
-      'meal.lunch':      true,
-      'allergens.value': {$in: allergensList}
-    },
-    {'_id': 0, '__v': 0},
-    (err, foods) => {
-    }
-  );
-}
-
-function getSnack(userData) {
-  let allergensList = [];
-  userData['allergic'].forEach((allergen) => {
-    allergensList.push(allergen.value);
-  });
-
-  Food.find(
-    {
-      'meal.snack':      true,
-      'allergens.value': {$in: allergensList}
-    },
-    {'_id': 0, '__v': 0},
-    (err, foods) => {
-    }
-  );
-}
-
-function getDinner(userData) {
-  let allergensList = [];
-  userData['allergic'].forEach((allergen) => {
-    allergensList.push(allergen.value);
-  });
-
-  Food.find(
-    {
-      'meal.dinner':     true,
-      'allergens.value': {$in: allergensList}
-    },
-    {'_id': 0, '__v': 0},
-    (err, foods) => {
-    }
-  );
-}
