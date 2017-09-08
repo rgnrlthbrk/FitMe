@@ -102,7 +102,6 @@ module.exports = {
           console.log('Error: ' + err);
           throw err;
         }
-        console.log(userData.userCalories * 0.1);
         deferred.resolve(generateCustomMeal(['m_'], ['f_'], null, userData.userCalories * 0.1, foods));
       }
     );
@@ -128,11 +127,10 @@ module.exports = {
         }
 
         let percent = 0.25; // keep
-         if ('gain' === userData.goals) {
+        if ('gain' === userData.goals) {
           percent = 0.2;
         }
-        console.log(userData.userCalories * percent);
-        deferred.resolve(generateCustomMeal(['m_', 'rb_', 'v_'], ['f_'], null, userData.userCalories * percent, foods));
+        deferred.resolve(generateCustomMeal(['m_', 'rb_'], ['v_', 'f_'], null, userData.userCalories * percent, foods));
       }
     );
     return deferred.promise;
@@ -140,18 +138,16 @@ module.exports = {
 };
 
 function generateCustomMeal(pattern1, pattern2, pattern3, calories, foods) {
-  // 1. get food quantity - if ml, g or 1
-  // 2. (m_ || rb_ || ml_+ v_) + (f_ || f_rye_bread || (f_milk || f_yogurt)) + d_
 
-  let first = generateSubMeal(calories, foods, pattern1);
-  let second = generateSubMeal(calories, foods, pattern2);
+  let first = generateSubMeal(foods, pattern1);
+  let second = generateSubMeal(foods, pattern2);
   let drink = (pattern3) ? generateDrink(foods) : null;
 
   return algorithm.compare(first, second, drink, calories);
 }
 
-function generateSubMeal(calories, foods, pattern) {
-  let first = foods.filter((food) => {
+function generateSubMeal(foods, pattern) {
+  let arr = foods.filter((food) => {
     let a = false;
     pattern.forEach((p) => {
       if (food.value.includes(p)) {
@@ -161,14 +157,7 @@ function generateSubMeal(calories, foods, pattern) {
     return a;
   });
 
-  let arrSubMeal = [];
-  first.forEach((subMeal) => {
-    if ((subMeal.calories * 2 ) <= calories) {
-      arrSubMeal.push(maximizeSubMealCalories(subMeal, calories, 1));
-    }
-  });
-
-  return algorithm.sort(arrSubMeal);
+  return algorithm.sort(arr);
 }
 
 function generateDrink(foods) {
@@ -177,24 +166,4 @@ function generateDrink(foods) {
   });
 
   return drink;
-}
-
-function maximizeSubMealCalories(subMeal, calories, count) {
-  let obj = {};
-
-  if (subMeal.calories * count <= calories / 2 && count <= 3) {
-    return maximizeSubMealCalories(subMeal, calories, count + 0.25);
-  } else {
-    obj['subMeal'] = subMeal;
-    obj['count'] = count - 0.25;
-    obj['calories'] = (count - 0.25) * subMeal.calories;
-  }
-  return obj;
-}
-
-function shuffle(arr) {
-  for (let i = arr.length; i; i--) {
-    let j = Math.floor(Math.random() * i);
-    [arr[i - 1], arr[j]] = [arr[j], arr[i - 1]];
-  }
 }

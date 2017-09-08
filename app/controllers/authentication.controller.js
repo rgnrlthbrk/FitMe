@@ -44,8 +44,8 @@ module.exports = {
       let secret = process.env.SECRET;
       jwt.verify(token, secret, (err, decoded) => {
         if (err) {
-          return res.send(err);
-          //return res.json({success : false, message : 'Failed to authenticate token.'});
+          // return res.send(err);
+          return res.json({success : false, message : 'Failed to authenticate token.'});
         } else {
           req.decoded = decoded;
           next();

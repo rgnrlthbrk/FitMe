@@ -1,4 +1,5 @@
 let userQ = require('./../queries/user.querie'),
+    foodQ = require('./../queries/food.querie'),
     meal  = require('./../utils/meal.util'),
     Q     = require('q');
 
@@ -6,32 +7,37 @@ module.exports = {
   generateMenu: () => {
     console.log('generateMenu');
     userQ
-      .getUser()
+      .getUsers()
       .then((userArr) => {
-        return userQ.getUserData(userArr);
+        return userQ.getUsersData(userArr);
       })
       .then((userDataArr) => {
         userDataArr.forEach((userData) => {
-          let obj = {
-            username:  userData.username,
-            breakfast: {},
-            brunch:    {},
-            lunch:     {},
-            snack:     {},
-            dinner:    {}
-          };
+          let userMenu = {};
+          userMenu.username = userData.username;
 
-          Q.all([
-            meal.getBreakfast(userData),
-            meal.getBrunch(userData),
-            meal.getLunch(userData),
-            meal.getSnack(userData),
-            meal.getDinner(userData)
-          ])
+          meal.getBreakfast(userData)
             .then((result) => {
-              console.log('result:');
-              console.log(result);
+              userMenu.breakfast = result;
+              return meal.getBrunch(userData);
+            })
+            .then((result) => {
+              userMenu.brunch = result;
+              return meal.getLunch(userData);
+            })
+            .then((result) => {
+              userMenu.lunch = result;
+              return meal.getSnack(userData);
+            })
+            .then((result) => {
+              userMenu.snack = result;
+              return meal.getDinner(userData);
+            })
+            .then((result) => {
+              userMenu.dinner = result;
+              foodQ.addUserMenu(userMenu);
             });
+
         });
       });
   }

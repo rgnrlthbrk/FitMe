@@ -5,9 +5,9 @@ module.exports = {
   generateUserDailyCalories: () => {
     console.log('generateUserDailyCalories');
     return user
-      .getUser()
+      .getUsers()
       .then((userArr) => {
-        return user.getUserData(userArr);
+        return user.getUsersData(userArr);
       })
       .then((userDataArr) => {
         let userCaloriesArr = [];

@@ -3,7 +3,7 @@ let User     = require('./../models/user.model'),
     Q        = require('q');
 
 module.exports = {
-  getUser:             () => {
+  getUsers:     () => {
     let deferred = Q.defer();
     User.find(
       {},
@@ -28,7 +28,7 @@ module.exports = {
       });
     return deferred.promise;
   },
-  getUserData:         (userArr) => {
+  getUsersData: (userArr) => {
     let deferred = Q.defer();
 
     UserData.find(
@@ -46,6 +46,49 @@ module.exports = {
           throw err;
         } else {
           deferred.resolve(userDataArr);
+        }
+      });
+    return deferred.promise;
+  },
+  getSingleUser:     (username) => {
+    let deferred = Q.defer();
+    User.findOne(
+      { username: username},
+      {'_id': 0, 'username': 1},
+      (err, result) => {
+        if (err) {
+          console.log('User not found!');
+          console.log(err);
+          throw err;
+        }
+        if (!result) {
+          console.log('No user found found!');
+          console.log(err);
+          throw err;
+        } else {
+          deferred.resolve(result.username);
+        }
+      });
+    return deferred.promise;
+  },
+  getSingleUserData: (username) => {
+    let deferred = Q.defer();
+
+    UserData.findOne(
+      {username: username},
+      {'_id': 0, '__v': 0},
+      (err, userData) => {
+        if (err) {
+          console.log('UserData not found!');
+          console.log(err);
+          throw err;
+        }
+        if (!userData) {
+          console.log('No user data found found!');
+          console.log(err);
+          throw err;
+        } else {
+          deferred.resolve(userData);
         }
       });
     return deferred.promise;

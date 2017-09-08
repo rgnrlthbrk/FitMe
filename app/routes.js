@@ -2,8 +2,8 @@ let router = require('express').Router(),
   routeUtil = require('./utils/route.util'),
   mainCtrl = require('./controllers/main.controller'),
   userCtrl = require('./controllers/userdata.controller'),
-  foodCtrl = require('./controllers/foods.controller'),
-  authCtrl = require('./controllers/authenticate.controller');
+  foodCtrl = require('./controllers/fooddata.controller'),
+  authCtrl = require('./controllers/authentication.controller');
 
 module.exports = router;
 
@@ -15,7 +15,6 @@ let unauthorizedPathsArr = [
   , '/registration'
   , '/fitme'
   , '/notfound'
-  , '/food'
   //,'/user'
   //,'/user/:username'
 ];
@@ -40,8 +39,9 @@ router.route('/user')
   .put(userCtrl.editUserData);
 
 // foodCtrl
-router.route('/food')
-  .post(foodCtrl.addFood);
+router.route('/user/:username')
+  .get(foodCtrl.getUserDailyMenu);
+
 
 // mainCtrl
 router.route('/fitme')
