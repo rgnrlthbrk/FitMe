@@ -1,16 +1,13 @@
 let User = require('../models/user.model'),
     jwt  = require('jsonwebtoken'),
-    path = require('path'),
     passwordHash = require('password-hash');
 
 module.exports = {
   userLogin   : (req, res) => {
-
     if (!req.body.username) {
       res.json({success : false, message : 'Authentication failed. User not found!'});
       return;
     }
-
     User.findOne({
       'username' : req.body.username
     }, (err, user) => {

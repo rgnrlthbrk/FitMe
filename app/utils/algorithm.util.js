@@ -5,15 +5,11 @@ module.exports = {
 
 function compare(first, second, drink, calories) {
   let arr = [];
-  // console.log('first: ' + first);
-  // console.log('second: ' + second);
   while (first) {
     if (!first) break;
     if (!first.length) break;
-    // console.log('first: ' + first.length);
-    // console.log('second: ' + second.length);
     let left = first.pop();
-    let objArr = checkMealArr(left, second, drink, calories); // returns arr! need forEach
+    let objArr = checkMealArr(left, second, drink, calories);
     if (objArr) {
       if (objArr.length) {
         objArr.forEach((element) => {
@@ -53,37 +49,28 @@ function checkMealArr(left, second, drink, calories) {
 function checkMeal(left, right, drink, calories) {
   if (left.calories * left.count + right.calories * right.count <= calories) {
     if (calories - calories * 0.1 <= left.calories * left.count + right.calories * right.count) {
-      // console.log('toMeal 1');
       return toMeal(left, right, drink);
     } else {
-      // console.log('checkMeal 1 null');
       return null;
     }
   } else {
     if (left.count === right.count === 0.5
       && left.calories * left.count + right.calories * right.count <= calories
       && calories - calories * 0.1 <= left.calories * left.count + right.calories * right.count) {
-      // console.log('toMeal 2');
       return toMeal(left, right, drink);
     }
 
     if (left.count < right.count && 0.5 < right.count) {
-      // console.log('checkMeal right.count1 -= 0.25;');
       right.count -= 0.25;
       return checkMeal(left, right, drink, calories);
     } else {
       if (left.count === right.count && 0.5 < right.count) {
-        // console.log('checkMeal right.count2 -= 0.25;');
         right.count -= 0.25;
         return checkMeal(left, right, drink, calories);
       } else if (right.count < left.count && 0.5 < left.count) {
-        // console.log('checkMeal left.count -= 0.25;');
         left.count -= 0.25;
         return checkMeal(left, right, drink, calories);
       } else {
-        // console.log('left count: ' + left.count);
-        // console.log('right count: ' + right.count);
-        // console.log('checkMeal 2 null');
         return null;
       }
     }

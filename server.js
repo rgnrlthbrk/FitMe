@@ -44,6 +44,7 @@ app.use('/', router);
 // start app
 const schedule = require('node-schedule');
 app.listen(port, () => {
+  // TODO: Have to think about an interval...
   schedule.scheduleJob('* * * * *', function () {
     let usersCalories = require('./app/utils/usercalories.util');
     usersCalories

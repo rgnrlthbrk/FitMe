@@ -11,7 +11,7 @@ module.exports = {
 function getCaloriesMen(userData) {
   let RMR = 66 + (13.7 * parseInt(userData.kilos))
                + (5 * parseInt(userData.height))
-               - (6.8 * parseInt(userData.age)); // RMR in kcal
+               - (6.8 * parseInt(userData.age));
   let AC = RMR * activityPeriod[userData.activityPeriod];
   return getTypeOfDiet(userData.goals, AC);
 }
@@ -19,7 +19,7 @@ function getCaloriesMen(userData) {
 function getCaloriesWomen(userData) {
   let RMR = 655 + (9.6 * parseInt(userData.kilos))
                 + (1.8 * parseInt(userData.height))
-                - (4.7 * parseInt(userData.age));  // RMR in kcal
+                - (4.7 * parseInt(userData.age));
   let AC = RMR * activityPeriod[userData.activityPeriod];
   return getTypeOfDiet(userData.goals, AC);
 }
@@ -32,7 +32,7 @@ let activityPeriod = {
   extreme:   1.9,
 };
 
-// 12% cut or gain of the daily meal
+// 13% cut or gain of the daily meal
 function getTypeOfDiet(diet, AC) {
   if (diet === 'loose') {
     return AC - AC * 0.13;

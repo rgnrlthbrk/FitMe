@@ -1,19 +1,19 @@
-let UserQuerie = require('./../queries/user.querie'),
-    FoodQuerie = require('./../queries/food.querie');
+let UserRequest = require('../requests/user.request'),
+    FoodRequest = require('../requests/food.request');
 
 module.exports = {
-  addFood:          (req, res) => {
-    return FoodQuerie.addFood(req, res);
+  addFoodAdmin:          (req, res) => {
+    return FoodRequest.addFood(req, res);
   },
   getUserDailyMenu: (req, res) => {
     let username = req.header('username');
-    UserQuerie
+    UserRequest
       .getSingleUser(username)
       .then((username) => {
-        return UserQuerie.getSingleUserData(username);
+        return UserRequest.getSingleUserData(username);
       })
       .then((userData) => {
-        return FoodQuerie.getUserMenu(userData.username);
+        return FoodRequest.getUserMenu(userData.username);
       })
       .then((userMenu) => {
         return res.json({

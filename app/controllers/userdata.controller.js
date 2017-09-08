@@ -1,10 +1,9 @@
-let User = require('../models/user.model'),
-  UserData = require('../models/userdata.model'),
-  passwordHash = require('password-hash');
+let User         = require('../models/user.model'),
+    UserData     = require('../models/userdata.model'),
+    passwordHash = require('password-hash');
 
 module.exports = {
   addUser:        (req, res) => {
-    console.log('addUser');
     User.findOne({
       username: req.body.username,
     }, (err, user) => {
@@ -55,7 +54,6 @@ module.exports = {
     });
   },
   showUserData:   (req, res) => {
-    console.log('showUserData');
     UserData.findOne({
         username: req.header('username')
       },
@@ -78,7 +76,6 @@ module.exports = {
       });
   },
   editUserData:   (req, res) => {
-    console.log('editUserData');
     const username = req.body.username || req.header('username');
     UserData.findOneAndUpdate({
         username: username
@@ -99,15 +96,14 @@ module.exports = {
       });
   },
   submitUserData: (req, res) => {
-    console.log('submitUserData');
     User.findOne({
       username: req.body.username || req.header('username')
     }, (err, user) => {
       if (err) {
         console.log('Error: ' + err);
-        throw err;
         return res.status(403).send(err);
       }
+
       if (!user) {
         return res.status(403).send({
           success: false,
@@ -152,8 +148,6 @@ module.exports = {
 };
 
 function request(req, username) {
-  console.log('request');
-  console.log(req.body);
   let object = {};
   object['username'] = username;
   for (let key in req.body) {

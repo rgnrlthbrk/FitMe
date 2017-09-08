@@ -1,9 +1,8 @@
-let user = require('./../queries/user.querie'),
+let user = require('../requests/user.request'),
     ccal = require('./calories.util');
 
 module.exports = {
   generateUserDailyCalories: () => {
-    console.log('generateUserDailyCalories');
     return user
       .getUsers()
       .then((userArr) => {

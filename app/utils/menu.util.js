@@ -1,11 +1,10 @@
-let userQ = require('./../queries/user.querie'),
-    foodQ = require('./../queries/food.querie'),
+let userQ = require('../requests/user.request'),
+    foodQ = require('../requests/food.request'),
     meal  = require('./../utils/meal.util'),
     Q     = require('q');
 
 module.exports = {
   generateMenu: () => {
-    console.log('generateMenu');
     userQ
       .getUsers()
       .then((userArr) => {
