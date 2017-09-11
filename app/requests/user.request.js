@@ -12,12 +12,12 @@ module.exports = {
         if (err) {
           console.log('User not found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         }
         if (!users) {
           console.log('No user found found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         } else {
           let userArr = [];
           users.forEach((user) => {
@@ -38,12 +38,12 @@ module.exports = {
         if (err) {
           console.log('UserData not found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         }
         if (!userDataArr) {
           console.log('No user data found found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         } else {
           deferred.resolve(userDataArr);
         }
@@ -59,12 +59,12 @@ module.exports = {
         if (err) {
           console.log('User not found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         }
         if (!result) {
           console.log('No user found found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         } else {
           deferred.resolve(result.username);
         }
@@ -81,12 +81,12 @@ module.exports = {
         if (err) {
           console.log('UserData not found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         }
         if (!userData) {
           console.log('No user data found found!');
           console.log(err);
-          throw err;
+          deferred.resolve(null);
         } else {
           deferred.resolve(userData);
         }
@@ -100,7 +100,6 @@ module.exports = {
       (err, status) => {
         if (err){
           console.log('Error: ' + err);
-          throw err;
         }
         if (!status) {
           console.log('No update!')

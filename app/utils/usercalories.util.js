@@ -1,12 +1,12 @@
-let user = require('../requests/user.request'),
+let userRequest = require('../requests/user.request'),
     ccal = require('./calories.util');
 
 module.exports = {
   generateUserDailyCalories: () => {
-    return user
+    return userRequest
       .getUsers()
       .then((userArr) => {
-        return user.getUsersData(userArr);
+        return userRequest.getUsersData(userArr);
       })
       .then((userDataArr) => {
         let userCaloriesArr = [];
@@ -21,7 +21,7 @@ module.exports = {
       })
       .then((userCaloriesArr) => {
         userCaloriesArr.forEach((userCalories) => {
-          user.setUserDataCalories(userCalories);
+          userRequest.setUserDataCalories(userCalories);
         });
         return userCaloriesArr;
       })

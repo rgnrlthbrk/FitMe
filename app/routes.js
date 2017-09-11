@@ -42,7 +42,6 @@ router.route('/user')
 router.route('/user/:username')
   .get(foodCtrl.getUserDailyMenu);
 
-
 // mainCtrl
 router.route('/fitme')
   .get(mainCtrl.getFitme);

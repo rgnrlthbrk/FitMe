@@ -20,7 +20,12 @@ module.exports = {
           success: true,
           content: userMenu
         });
+      })
+      .catch((err) => {
+        return res.status(403).send({
+          success: true,
+          content: 'Error fetching user data!'
+        });
       });
-
   }
 };

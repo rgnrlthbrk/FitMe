@@ -1,14 +1,14 @@
-let userQ = require('../requests/user.request'),
+let userRequest = require('../requests/user.request'),
     foodQ = require('../requests/food.request'),
     meal  = require('./../utils/meal.util'),
     Q     = require('q');
 
 module.exports = {
   generateMenu: () => {
-    userQ
+    userRequest
       .getUsers()
       .then((userArr) => {
-        return userQ.getUsersData(userArr);
+        return userRequest.getUsersData(userArr);
       })
       .then((userDataArr) => {
         userDataArr.forEach((userData) => {
