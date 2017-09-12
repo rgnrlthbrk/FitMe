@@ -1,5 +1,5 @@
 let mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+    Schema = mongoose.Schema;
 
 let foodSchema = new Schema({
   name:      {

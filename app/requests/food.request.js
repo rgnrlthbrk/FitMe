@@ -1,5 +1,5 @@
 let FoodData = require('./../models/fooddata.model'),
-    Food     = require('./../models/food.model'),
+    Food     = require('../models/food.model'),
     Q        = require('q');
 
 module.exports = {

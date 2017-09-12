@@ -1,22 +1,13 @@
 require('dotenv').config();
 
-// config files
-let port = process.env.PORT || 8181;
-
 // connect to our mongoDB database
-let MongoClient = require('mongodb').MongoClient,
-    mongoose    = require('mongoose');
+let mongoose    = require('mongoose');
 mongoose.Promise = Promise;
 mongoose.connect(process.env.DB_URI, {config: {autoIndex: false}});
-//MongoClient.connect(process.env.DB_URI);
 
-// get all data/stuff of the body (POST) parameters
-// parse application/json
 let express = require('express'),
     app     = express(),
-    morgan  = require('morgan'),
-    favicon = require('serve-favicon'),
-    path    = require('path');
+    morgan  = require('morgan');
 app.set('superSecret', process.env.SECRET);
 
 app.use(morgan('dev'));
@@ -42,15 +33,19 @@ let router = require('./app/routes');
 app.use('/', router);
 
 // start app
-const schedule = require('node-schedule');
+const schedule = require('node-schedule'),
+      usersCalories = require('./app/utils/usercalories.util'),
+      menu = require('./app/utils/menu.util');
+
+
+// config files
+let port = process.env.PORT || 8181;
 app.listen(port, () => {
   // TODO: Have to think about an interval...
   schedule.scheduleJob('* * * * *', function () {
-    let usersCalories = require('./app/utils/usercalories.util');
     usersCalories
       .generateUserDailyCalories()
       .then(() => {
-        let menu = require('./app/utils/menu.util');
         menu.generateMenu();
       })
       .catch((err) => {

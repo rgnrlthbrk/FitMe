@@ -1,7 +1,6 @@
-let Food      = require('./../models/food.model'),
+let Food      = require('../models/food.model'),
     algorithm = require('./../utils/algorithm.util'),
     Q         = require('q');
-;
 
 module.exports = {
   getBreakfast: (userData) => {
@@ -161,9 +160,7 @@ function generateSubMeal(foods, pattern) {
 }
 
 function generateDrink(foods) {
-  let drink = foods.filter((food) => {
+  return foods.filter((food) => {
     return food.value.includes('d_');
   });
-
-  return drink;
 }
