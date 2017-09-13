@@ -2,10 +2,6 @@ let mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
 
 let foodDataSchema = new Schema({
-  username:  {
-    type:     String,
-    required: true
-  },
   breakfast: {
     type:     Array,
     required: true

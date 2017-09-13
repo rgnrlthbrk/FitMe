@@ -25,6 +25,10 @@ let userSchema = new Schema({
     type     : Date,
     default  : Date.now,
     required : true
+  },
+  user_data:       {
+    type: Schema.Types.ObjectId,
+    ref: 'UserData'
   }
 });
 

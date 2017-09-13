@@ -39,18 +39,19 @@ module.exports = {
       }
     });
   },
-  getUserMenu: (username) => {
+  getUserMenu: (id) => {
     let deferred = Q.defer();
+    // TODO: Change with today's user menu from UserData
     FoodData.find(
       {
-        username: username
+        _id: id
       },
       {
         '_id': 0,
         '__v': 0
       },
       (err, foodData) => {
-        if (err){
+        if (err) {
           console.log(err);
           throw err;
         }
@@ -60,19 +61,18 @@ module.exports = {
     return deferred.promise;
   },
   addUserMenu: (userMenu) => {
+    let deferred = Q.defer();
     FoodData
       .findOneAndUpdate(
         {
-          username: userMenu.username
+          _id: userMenu.food_data
         },
         {
-          username: userMenu.username,
           breakfast: userMenu.breakfast,
-          brunch: userMenu.brunch,
-          lunch: userMenu.lunch,
-          snack: userMenu.snack,
-          dinner: userMenu.dinner
-
+          brunch:    userMenu.brunch,
+          lunch:     userMenu.lunch,
+          snack:     userMenu.snack,
+          dinner:    userMenu.dinner
         },
         (err, result) => {
           if (err) {
@@ -80,16 +80,17 @@ module.exports = {
             throw err;
           }
           if (!result) {
-            console.log('Adding data for user ' + userMenu.username);
+            console.log('Adding data for user ' + userMenu.food_data);
             let entry = new FoodData(userMenu);
-            entry.save((err) => {
+            entry.save((err, foodData) => {
               if (err) {
                 console.log(err);
                 throw err;
               }
+              deferred.resolve(foodData._id);
             });
           }
         });
-
+    return deferred.promise;
   }
 };

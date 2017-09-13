@@ -8,12 +8,12 @@ module.exports = {
   getUserDailyMenu: (req, res) => {
     let username = req.header('username');
     UserRequest
-      .getSingleUser(username)
-      .then((username) => {
-        return UserRequest.getSingleUserData(username);
+      .getSingleUserByName(username)
+      .then((id) => {
+        return UserRequest.getSingleUserData(id);
       })
       .then((userData) => {
-        return FoodRequest.getUserMenu(userData.username);
+        return FoodRequest.getUserMenu(userData.food_data);
       })
       .then((userMenu) => {
         return res.json({
@@ -24,7 +24,7 @@ module.exports = {
       .catch((err) => {
         return res.status(403).send({
           success: true,
-          content: 'Error fetching user data!'
+          content: 'Error fetchin'
         });
       });
   }

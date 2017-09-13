@@ -2,11 +2,6 @@ let mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
 
 let userDataSchema = new Schema({
-  username:       {
-    type:     String,
-    required: true,
-    unique:   true
-  },
   age:            {
     type:     Number,
     required: true
@@ -35,8 +30,20 @@ let userDataSchema = new Schema({
     type:     String,
     required: true
   },
-  userCalories:  {
+  userCalories:   {
     type:     Number,
+    required: false
+  },
+  food_data:      {
+    type: Schema.Types.ObjectId,
+    ref:  'FoodData'
+  },
+  food_menu:      {
+    type:     Array,
+    required: false
+  },
+  food_menu_past: {
+    type:     Array,
     required: false
   }
 });

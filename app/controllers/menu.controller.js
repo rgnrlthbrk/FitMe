@@ -1,19 +1,18 @@
 let userRequest = require('../requests/user.request'),
     foodQ = require('../requests/food.request'),
-    meal  = require('./../utils/meal.util'),
-    Q     = require('q');
+    meal  = require('../utils/meals.util');
 
 module.exports = {
   generateMenu: () => {
     userRequest
       .getUsers()
-      .then((userArr) => {
-        return userRequest.getUsersData(userArr);
+      .then((idArr) => {
+        return userRequest.getUsersData(idArr);
       })
       .then((userDataArr) => {
         userDataArr.forEach((userData) => {
           let userMenu = {};
-          userMenu.username = userData.username;
+          userMenu.food_data= userData.food_data;
 
           meal.getBreakfast(userData)
             .then((result) => {
@@ -34,9 +33,14 @@ module.exports = {
             })
             .then((result) => {
               userMenu.dinner = result;
-              foodQ.addUserMenu(userMenu);
+              return foodQ.addUserMenu(userMenu);
+            })
+            .then((id) => {
+              return userRequest.updateUserDataFoodData(userData, id)
+            })
+            .catch((err) => {
+              console.log(err);
             });
-
         });
       });
   }

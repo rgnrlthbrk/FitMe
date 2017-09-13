@@ -2,6 +2,7 @@ require('dotenv').config();
 
 // connect to our mongoDB database
 let mongoose    = require('mongoose');
+mongoose.set('debug', false);
 mongoose.Promise = Promise;
 mongoose.connect(process.env.DB_URI, {config: {autoIndex: false}});
 
@@ -35,7 +36,7 @@ app.use('/', router);
 // start app
 const schedule = require('node-schedule'),
       usersCalories = require('./app/utils/usercalories.util'),
-      menu = require('./app/utils/menu.util');
+      menu = require('./app/controllers/menu.controller');
 
 
 // config files

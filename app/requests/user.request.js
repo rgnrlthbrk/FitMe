@@ -1,13 +1,14 @@
 let User     = require('./../models/user.model'),
     UserData = require('./../models/userdata.model'),
-    Q        = require('q');
+    Q        = require('q'),
+    mongoose = require('mongoose');
 
 module.exports = {
-  getUsers:     () => {
+  getUsers:             () => {
     let deferred = Q.defer();
     User.find(
       {},
-      {'_id': 0, 'username': 1},
+      {'_id': 0},
       (err, users) => {
         if (err) {
           console.log('User not found!');
@@ -19,29 +20,28 @@ module.exports = {
           console.log(err);
           deferred.resolve(null);
         } else {
-          let userArr = [];
+          let userDataIdArr = [];
           users.forEach((user) => {
-            userArr.push(user.username);
+            if(user.user_data) {
+              userDataIdArr.push(user.user_data);
+            }
           });
-          deferred.resolve(userArr);
+          deferred.resolve(userDataIdArr);
         }
       });
     return deferred.promise;
   },
-  getUsersData: (userArr) => {
+  getUsersData:         (idArr) => {
     let deferred = Q.defer();
-
     UserData.find(
-      {username: {'$in': userArr}},
-      {'_id': 0, '__v': 0},
+      {_id: {'$in': idArr}},
+      {'__v': 0},
       (err, userDataArr) => {
         if (err) {
-          console.log('UserData not found!');
           console.log(err);
           deferred.resolve(null);
         }
         if (!userDataArr) {
-          console.log('No user data found found!');
           console.log(err);
           deferred.resolve(null);
         } else {
@@ -50,11 +50,37 @@ module.exports = {
       });
     return deferred.promise;
   },
-  getSingleUser:     (username) => {
+  getSingleUserByName:  (username) => {
     let deferred = Q.defer();
     User.findOne(
-      { username: username},
-      {'_id': 0, 'username': 1},
+      {username: username},
+      {
+        '_id': 1,
+        'user_data': 1,
+        'food_data': 1
+      },
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          deferred.resolve(null);
+        }
+        if (!result) {
+          console.log(err);
+          deferred.resolve(null);
+        } else {
+          deferred.resolve(result);
+        }
+      });
+    return deferred.promise;
+  },
+  getSingleUserByEmail: (email) => {
+    let deferred = Q.defer();
+    User.findOne(
+      {email: email},
+      {
+        'user_data': 1,
+        'food_data': 1
+      },
       (err, result) => {
         if (err) {
           console.log('User not found!');
@@ -66,25 +92,26 @@ module.exports = {
           console.log(err);
           deferred.resolve(null);
         } else {
-          deferred.resolve(result.username);
+          deferred.resolve(result);
         }
       });
     return deferred.promise;
   },
-  getSingleUserData: (username) => {
+  getSingleUserData:    (id) => {
     let deferred = Q.defer();
-
-    UserData.findOne(
-      {username: username},
-      {'_id': 0, '__v': 0},
+    console.log(mongoose.Types.ObjectId(id));
+    UserData.findOne({
+        _id: id
+      },
+      {
+        '_id': 0
+      },
       (err, userData) => {
         if (err) {
-          console.log('UserData not found!');
           console.log(err);
           deferred.resolve(null);
         }
         if (!userData) {
-          console.log('No user data found found!');
           console.log(err);
           deferred.resolve(null);
         } else {
@@ -93,16 +120,30 @@ module.exports = {
       });
     return deferred.promise;
   },
-  setUserDataCalories: (userCalories) => {
+  setUserDataCalories:  (userCalories) => {
     UserData.update(
-      {username: userCalories.username},
+      {_id: userCalories._id},
       {$set: {userCalories: userCalories.calories}},
       (err, status) => {
-        if (err){
+        if (err) {
           console.log('Error: ' + err);
         }
         if (!status) {
-          console.log('No update!')
+          console.log('No update!');
+        }
+      }
+    );
+  },
+  updateUserDataFoodData: (userData, food_data_id)=> {
+    UserData.update(
+      {_id: userData._id},
+      {$set: {food_data: food_data_id}},
+      (err, status) => {
+        if (err) {
+          console.log('Error: ' + err);
+        }
+        if (!status) {
+          console.log('No update!');
         }
       }
     );

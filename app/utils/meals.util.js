@@ -21,11 +21,9 @@ module.exports = {
           console.log('Error: ' + err);
           throw err;
         }
-        let percent = 0.35; // keep
-        if ('loose' === userData.goals) {
-          percent = 0.35;
-        } else if ('gain' === userData.goals) {
-          percent = 0.3;
+        let percent = 0.3; // keep
+        if ('gain' === userData.goals) {
+          percent = 0.25;
         }
         deferred.resolve(generateCustomMeal(['m_', 'rb_', 'ml_', 'v_'], ['f_'], ['d_'], userData.userCalories * percent, foods));
       }
@@ -101,7 +99,7 @@ module.exports = {
           console.log('Error: ' + err);
           throw err;
         }
-        deferred.resolve(generateCustomMeal(['m_'], ['f_'], null, userData.userCalories * 0.1, foods));
+        deferred.resolve(generateCustomMeal(['m_'], ['f_'], null, userData.userCalories * 0.15, foods));
       }
     );
     return deferred.promise;

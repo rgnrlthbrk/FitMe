@@ -1,19 +1,19 @@
 let userRequest = require('../requests/user.request'),
-    ccal = require('./calories.util');
+    ccal = require('./caloriescounter.util');
 
 module.exports = {
   generateUserDailyCalories: () => {
     return userRequest
       .getUsers()
-      .then((userArr) => {
-        return userRequest.getUsersData(userArr);
+      .then((idArr) => {
+        return userRequest.getUsersData(idArr);
       })
       .then((userDataArr) => {
         let userCaloriesArr = [];
         userDataArr.forEach((userData) => {
           let calories = ccal.getCallories(userData);
           userCaloriesArr.push({
-            username: userData.username,
+            _id: userData._id,
             calories: calories
           });
         });

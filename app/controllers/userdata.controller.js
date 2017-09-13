@@ -1,78 +1,61 @@
 let User         = require('../models/user.model'),
     UserData     = require('../models/userdata.model'),
+    userRequest  = require('../requests/user.request'),
     passwordHash = require('password-hash');
 
 module.exports = {
   addUser:        (req, res) => {
-    User.findOne({
-      username: req.body.username,
-    }, (err, user) => {
-      if (err) {
-        console.log('Error: ' + err);
-        throw err;
-      }
-      if (user) {
+    let message = '';
+    return userRequest
+      .getSingleUserByName(req.body.username)
+      .then((id) => {
+        if (id) {
+          message = 'User with this name already exists. Please select another username.';
+          throw err;
+        } else {
+          return userRequest.getSingleUserByEmail(req.body.email);
+        }
+      })
+      .then((id) => {
+        if (id) {
+          message = 'User with this e-mail already exists. Please enter another valid e-mail address.';
+          throw err;
+        } else {
+          return checkPassword(req, res);
+        }
+      })
+      .catch(() => {
         return res.status(403).send({
           success: false,
-          message: 'User with this name already exists. Please select another username.'
+          message: message
         });
-      } else {
-        User.findOne({
-          'email': req.body.email,
-        }, (err, email) => {
-          if (err) {
-            console.log('Error: ' + err);
-            throw err;
-          }
-          if (email) {
-            return res.status(403).send({
-              success: false,
-              message: 'User with this e-mail already exists. Please enter another valid e-mail address.'
-            });
-          } else {
-            let hashedPassword = passwordHash.generate(req.body.password, {
-              algorithm:  process.env.ALGORITHM,
-              iterations: process.env.ITERATIONS
-            });
-
-            let entry = new User({
-              username:       req.body.username,
-              password:       hashedPassword,
-              email:          req.body.email,
-              authorisations: req.body.authorisations
-            });
-
-            entry.save((err) => {
-              if (err) {
-                throw err;
-              }
-              res.json({message: entry.username + ' has been created!'});
-            });
-          }
-        });
-      }
-    });
+      });
   },
   showUserData:   (req, res) => {
-    UserData.findOne({
-        username: req.header('username')
-      },
-      {
-        '_id': 0,
-        '__v': 0
-      },
-      (err, userData) => {
-        if (err) {
-          res.send(err);
+    let message = '';
+    return userRequest
+      .getSingleUserByName(req.header('username'))
+      .then((id) => {
+        if (!id) {
+          message = 'No user found!';
+        } else {
+          console.log('id.user_data_id: ' + id.user_data);
+          return userRequest.getSingleUserData(id.user_data);
         }
-        console.log(userData);
-        if (!userData) {
-          return res.status(403).send({
-            success: false,
-            message: 'No user found.'
-          });
+      })
+      .then((result) => {
+        if (!result) {
+          message = 'No user data found!';
+        } else {
+          console.log(result);
+          return res.json(result);
         }
-        res.json(userData);
+      })
+      .catch(() => {
+        return res.status(403).send({
+          success: false,
+          message: message
+        });
       });
   },
   editUserData:   (req, res) => {
@@ -96,56 +79,89 @@ module.exports = {
       });
   },
   submitUserData: (req, res) => {
-    User.findOne({
-      username: req.body.username || req.header('username')
-    }, (err, user) => {
-      if (err) {
-        console.log('Error: ' + err);
-        return res.status(403).send(err);
-      }
+    const username = req.body.username || req.header('username');
+    let userId;
+    let message = '';
+    userRequest
+      .getSingleUserByName(username)
+      .then((user) => {
+        if (!user) {
+          message = 'User not found!';
+          throw err;
+        } else {
+          userId = user._id;
+          console.log('user');
+          console.log(user);
+          console.log('user1');
+          return userRequest.getSingleUserData(user.user_data);
+        }
+      })
+      .then((userData) => {
+        if(userData){
+          message = 'Cannot set data to existing user!';
+          throw err;
+        } else {
+          let entry = new UserData({
+            age:            req.body.age,
+            height:         req.body.height,
+            kilos:          req.body.kilos,
+            sex:            req.body.sex,
+            goals:          req.body.goals,
+            activityPeriod: req.body.activityPeriod,
+            allergic:       req.body.allergic
+          });
+          entry.save((err) => {
+            if (err) {
+              throw err;
+            }
+            User.findOneAndUpdate({
+                _id: userId
+              },
+              {
+                $set: {user_data: entry._id}
+              },
+              {upsert: true},
+              function (err) {
+                if (err) {
+                  res.status(403).send(err);
+                } else {
 
-      if (!user) {
+                  res.json({message: 'User ' + entry.username + ' has been populated with data!'});
+                }
+              });
+          });
+
+        }
+      })
+      .catch(() => {
         return res.status(403).send({
           success: false,
-          message: 'User with this name doesn\'t exist.'
+          message: message
         });
-      } else {
-        UserData.findOne({
-          username: user.username,
-        }, (err, user) => {
-          if (err) {
-            console.log('Error: ' + err);
-            throw err;
-          }
-          if (user) {
-            return res.status(403).send({
-              success: false,
-              message: 'Cannot set data to existing user.'
-            });
-          } else {
-
-            let entry = new UserData({
-              username:       req.body.username || req.header('username'),
-              age:            req.body.age,
-              height:         req.body.height,
-              kilos:          req.body.kilos,
-              sex:            req.body.sex,
-              goals:          req.body.goals,
-              activityPeriod: req.body.activityPeriod,
-              allergic:       req.body.allergic
-            });
-            entry.save((err) => {
-              if (err) {
-                throw err;
-              }
-              res.json({message: 'User ' + entry.username + ' has been populated with data!'});
-            });
-          }
-        });
-      }
-    });
+      });
   }
 };
+
+function checkPassword(req, res) {
+  let hashedPassword = passwordHash.generate(req.body.password, {
+    algorithm:  process.env.ALGORITHM,
+    iterations: process.env.ITERATIONS
+  });
+
+  let entry = new User({
+    username:       req.body.username,
+    password:       hashedPassword,
+    email:          req.body.email,
+    authorisations: req.body.authorisations
+  });
+
+  entry.save((err) => {
+    if (err) {
+      throw err;
+    }
+    return res.json({message: entry.username + ' has been created!'});
+  });
+}
 
 function request(req, username) {
   let object = {};
