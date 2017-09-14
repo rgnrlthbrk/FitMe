@@ -1,10 +1,9 @@
 let User     = require('./../models/user.model'),
     UserData = require('./../models/userdata.model'),
-    Q        = require('q'),
-    mongoose = require('mongoose');
+    Q        = require('q');
 
 module.exports = {
-  getUsers:             () => {
+  getUsers:                  () => {
     let deferred = Q.defer();
     User.find(
       {},
@@ -22,7 +21,7 @@ module.exports = {
         } else {
           let userDataIdArr = [];
           users.forEach((user) => {
-            if(user.user_data) {
+            if (user.user_data) {
               userDataIdArr.push(user.user_data);
             }
           });
@@ -31,7 +30,7 @@ module.exports = {
       });
     return deferred.promise;
   },
-  getUsersData:         (idArr) => {
+  getUsersData:              (idArr) => {
     let deferred = Q.defer();
     UserData.find(
       {_id: {'$in': idArr}},
@@ -50,30 +49,19 @@ module.exports = {
       });
     return deferred.promise;
   },
-  getSingleUserByName:  (username) => {
-    let deferred = Q.defer();
-    User.findOne(
+  getSingleUserByName:       (username) => {
+    return User.findOne(
       {username: username},
       {
-        '_id': 1,
-        'user_data': 1,
-        'food_data': 1
+        '_v': 0
       },
-      (err, result) => {
+      (err) => {
         if (err) {
-          console.log(err);
-          deferred.resolve(null);
-        }
-        if (!result) {
-          console.log(err);
-          deferred.resolve(null);
-        } else {
-          deferred.resolve(result);
+          console.log('Error: ' + err);
         }
       });
-    return deferred.promise;
   },
-  getSingleUserByEmail: (email) => {
+  getSingleUserByEmail:      (email) => {
     let deferred = Q.defer();
     User.findOne(
       {email: email},
@@ -97,30 +85,20 @@ module.exports = {
       });
     return deferred.promise;
   },
-  getSingleUserData:    (id) => {
-    let deferred = Q.defer();
-    console.log(mongoose.Types.ObjectId(id));
-    UserData.findOne({
+  getSingleUserData:         (id) => {
+    return UserData.findOne({
         _id: id
       },
       {
-        '_id': 0
+        '_v': 0
       },
-      (err, userData) => {
+      (err) => {
         if (err) {
-          console.log(err);
-          deferred.resolve(null);
-        }
-        if (!userData) {
-          console.log(err);
-          deferred.resolve(null);
-        } else {
-          deferred.resolve(userData);
+          console.log('Error: ' + err);
         }
       });
-    return deferred.promise;
   },
-  setUserDataCalories:  (userCalories) => {
+  setUserDataCalories:       (userCalories) => {
     UserData.update(
       {_id: userCalories._id},
       {$set: {userCalories: userCalories.calories}},
@@ -134,10 +112,77 @@ module.exports = {
       }
     );
   },
-  updateUserDataFoodData: (userData, food_data_id)=> {
+  updateUserDataFoodData:    (userData, food_data_id) => {
+    if (!userData._id) {
+      console.log('userdata null');
+      return null;
+    }
+
     UserData.update(
       {_id: userData._id},
       {$set: {food_data: food_data_id}},
+      (err, status) => {
+        if (err) {
+          console.log('Errorche: ' + err);
+        }
+        if (!status) {
+          console.log('No update!');
+        }
+      }
+    );
+  },
+  handleUserDataFoodMenu:    (userData, food_menu) => {
+    if (!userData._id) {
+      console.log('userdata null');
+      return null;
+    }
+
+    UserData.findOneAndUpdate(
+      {_id: userData._id},
+      {
+        $set:  {food_menu: food_menu},
+        $push: {food_menu_past: userData.food_menu}
+      },
+      {upsert: true},
+      (err) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+      });
+  },
+  handleUserDataFoodMenuNew: (userData, food_menu) => {
+    if (!userData._id) {
+      console.log('userdata null');
+      return null;
+    }
+
+    console.log(userData._id + ' : ' + food_menu);
+    UserData.findOneAndUpdate(
+      {_id: userData._id},
+      {
+        $set: {food_menu: food_menu},
+      },
+      {upsert: true},
+      (err) => {
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+      });
+  },
+  updateUserDataFoodMenu:    (userData, food_menu) => {
+    if (!userData._id) {
+      console.log('userdata null');
+      return null;
+    }
+    console.log(userData._id + ' : ' + food_menu);
+
+    UserData.findOneAndUpdate(
+      {_id: userData._id},
+      {
+        $set: {food_menu: food_menu}
+      },
       (err, status) => {
         if (err) {
           console.log('Error: ' + err);
@@ -147,5 +192,5 @@ module.exports = {
         }
       }
     );
-  }
+  },
 };

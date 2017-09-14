@@ -1,6 +1,9 @@
 let User         = require('../models/user.model'),
     UserData     = require('../models/userdata.model'),
     userRequest  = require('../requests/user.request'),
+    userCalories = require('../utils/usercalories.util'),
+    menuCtrl     = require('../controllers/menu.controller'),
+    Q            = require('q'),
     passwordHash = require('password-hash');
 
 module.exports = {
@@ -39,7 +42,6 @@ module.exports = {
         if (!id) {
           message = 'No user found!';
         } else {
-          console.log('id.user_data_id: ' + id.user_data);
           return userRequest.getSingleUserData(id.user_data);
         }
       })
@@ -67,7 +69,7 @@ module.exports = {
         $set: request(req, username)
       },
       {upsert: true},
-      function (err) {
+      (err) => {
         if (err) {
           res.status(403).send(err);
         } else {
@@ -80,7 +82,7 @@ module.exports = {
   },
   submitUserData: (req, res) => {
     const username = req.body.username || req.header('username');
-    let userId;
+    let tmpUser;
     let message = '';
     userRequest
       .getSingleUserByName(username)
@@ -89,18 +91,16 @@ module.exports = {
           message = 'User not found!';
           throw err;
         } else {
-          userId = user._id;
-          console.log('user');
-          console.log(user);
-          console.log('user1');
+          tmpUser = user;
           return userRequest.getSingleUserData(user.user_data);
         }
       })
       .then((userData) => {
-        if(userData){
+        if (userData) {
           message = 'Cannot set data to existing user!';
           throw err;
         } else {
+          let deferred = Q.defer();
           let entry = new UserData({
             age:            req.body.age,
             height:         req.body.height,
@@ -115,23 +115,29 @@ module.exports = {
               throw err;
             }
             User.findOneAndUpdate({
-                _id: userId
+                _id: tmpUser._id
               },
               {
                 $set: {user_data: entry._id}
               },
               {upsert: true},
-              function (err) {
+              (err) => {
                 if (err) {
                   res.status(403).send(err);
                 } else {
-
-                  res.json({message: 'User ' + entry.username + ' has been populated with data!'});
+                  deferred.resolve(tmpUser);
+                  res.json({message: 'User ' + tmpUser.username + ' has been populated with data!'});
                 }
               });
           });
-
+          return deferred.promise;
         }
+      })
+      .then((user) => {
+        userCalories.generateSingleUserDailyCalories(tmpUser.username)
+          .then(() => {
+            menuCtrl.generateMenuUser(tmpUser.username);
+          });
       })
       .catch(() => {
         return res.status(403).send({

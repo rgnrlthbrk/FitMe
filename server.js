@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 // connect to our mongoDB database
-let mongoose    = require('mongoose');
+let mongoose = require('mongoose');
 mongoose.set('debug', false);
 mongoose.Promise = Promise;
 mongoose.connect(process.env.DB_URI, {config: {autoIndex: false}});
@@ -34,20 +34,20 @@ let router = require('./app/routes');
 app.use('/', router);
 
 // start app
-const schedule = require('node-schedule'),
+const schedule      = require('node-schedule'),
       usersCalories = require('./app/utils/usercalories.util'),
-      menu = require('./app/controllers/menu.controller');
-
+      menu          = require('./app/controllers/menu.controller');
 
 // config files
 let port = process.env.PORT || 8181;
 app.listen(port, () => {
   // TODO: Have to think about an interval...
-  schedule.scheduleJob('* * * * *', function () {
+  schedule.scheduleJob('* * */24 * *', function () {
     usersCalories
       .generateUserDailyCalories()
       .then(() => {
-        menu.generateMenu();
+        console.log('menu.generateMenu');
+        return menu.generateMenu();
       })
       .catch((err) => {
         console.log(err);

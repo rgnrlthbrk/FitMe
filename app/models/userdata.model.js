@@ -39,7 +39,7 @@ let userDataSchema = new Schema({
     ref:  'FoodData'
   },
   food_menu:      {
-    type:     Array,
+    type:     Object,
     required: false
   },
   food_menu_past: {
