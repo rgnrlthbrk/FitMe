@@ -2,12 +2,20 @@ module.exports = {
   parseResult: parseResult
 };
 
-function parseResult(result) {
+function parseResult(objResult) {
   let objArr = [];
-  if (!result) {
+  let result = {};
+  if (!objResult) {
     console.log('empty result');
-    return null;
+    if (!objResult[0]){
+      console.log('empty result array');
+      return null;
+    }
+    result = objResult[0];
+  } else {
+    result = objResult;
   }
+
   objArr.push(parseMenu(result.breakfast, 'breakfast'));
   objArr.push(parseMenu(result.brunch, 'brunch'));
   objArr.push(parseMenu(result.lunch, 'lunch'));

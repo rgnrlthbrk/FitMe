@@ -51,7 +51,7 @@ function addFood(req, res) {
 
 function getUnparsedUserMenuArr(id) {
   let deferred = Q.defer();
-  FoodData.find(
+  FoodData.findOne(
     {
       _id: id
     },
@@ -59,12 +59,17 @@ function getUnparsedUserMenuArr(id) {
       '_id': 0,
       '__v': 0
     },
-    (err, foodData) => {
+    (err, foodMenu) => {
       if (err) {
         console.log(err);
         throw err;
       }
-      deferred.resolve(foodData);
+      if (!foodMenu) {
+        console.log('foodMenu is null');
+        deferred.resolve(null);
+      } else {
+        deferred.resolve(foodMenu);
+      }
     }
   );
   return deferred.promise;
@@ -96,6 +101,7 @@ function addUnparsedUserMenuArr(userMenu) {
               console.log(err);
               throw err;
             }
+
             deferred.resolve(foodData._id);
           });
         } else {
@@ -119,11 +125,13 @@ function addUserMenuToday(id) {
       }
     })
     .then((result) => {
-      if (!result) {
+      if (!result || result.length <= 0) {
         console.log('No food menu array for user! Return null!');
         return null;
       } else {
-        return dailymenu.parseResult(result[0]);
+        let deferred = Q.defer();
+        deferred.resolve(dailymenu.parseResult(result));
+        return deferred.promise;
       }
     })
     .then((parsedMenu) => {
@@ -152,7 +160,7 @@ function getUserMealToday(username) {
         console.log('null user!');
         deferred.resolve(null);
       } else {
-        deferred.resolve(userRequest.getSingleUserData(id));
+        deferred.resolve(userRequest.getSingleUserData(id).food_menu);
       }
     })
     .catch((err) => {

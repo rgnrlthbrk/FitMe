@@ -117,7 +117,7 @@ module.exports = {
       console.log('userdata null');
       return null;
     }
-
+    let deferred = Q.defer();
     UserData.update(
       {_id: userData._id},
       {$set: {food_data: food_data_id}},
@@ -127,9 +127,14 @@ module.exports = {
         }
         if (!status) {
           console.log('No update!');
+          deferred.resolve(null);
+        } else {
+          console.log('STATUS: ' + status);
+          deferred.resolve(status);
         }
       }
     );
+    return deferred.promise;
   },
   handleUserDataFoodMenu:    (userData, food_menu) => {
     if (!userData._id) {
