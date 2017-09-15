@@ -63,7 +63,7 @@ function menuUser(userData) {
       return userRequest.updateUserDataFoodData(userData, id);
     })
     .then(() => {
-      return foodRequest.addUserMenuToday(userData._id);
+      return foodRequest.addUserMenu(userData._id);
     })
     .catch((err) => {
       console.log(err);

@@ -145,7 +145,7 @@ module.exports = {
     UserData.findOneAndUpdate(
       {_id: userData._id},
       {
-        $set:  {food_menu: food_menu},
+        $set:  {food_menu: food_menu[0]},
         $push: {food_menu_past: userData.food_menu}
       },
       {upsert: true},
@@ -166,7 +166,8 @@ module.exports = {
     UserData.findOneAndUpdate(
       {_id: userData._id},
       {
-        $set: {food_menu: food_menu},
+        $set:  {food_menu: food_menu[0]},
+        $push: {food_menu_past: food_menu[1]}
       },
       {upsert: true},
       (err) => {

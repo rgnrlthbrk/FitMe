@@ -41,8 +41,7 @@ const schedule      = require('node-schedule'),
 // config files
 let port = process.env.PORT || 8181;
 app.listen(port, () => {
-  // TODO: Have to think about an interval...
-  schedule.scheduleJob('* * */24 * *', function () {
+  schedule.scheduleJob('0 0 5 * *', function () {
     usersCalories
       .generateUserDailyCalories()
       .then(() => {

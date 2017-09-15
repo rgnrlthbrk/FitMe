@@ -3,7 +3,9 @@ module.exports = {
 };
 
 function parseResult(objResult) {
-  let objArr = [];
+  let objArr = [],
+      objMainArr = [];
+
   let result = {};
   if (!objResult) {
     console.log('empty result');
@@ -16,13 +18,17 @@ function parseResult(objResult) {
     result = objResult;
   }
 
-  objArr.push(parseMenu(result.breakfast, 'breakfast'));
-  objArr.push(parseMenu(result.brunch, 'brunch'));
-  objArr.push(parseMenu(result.lunch, 'lunch'));
-  objArr.push(parseMenu(result.snack, 'snack'));
-  objArr.push(parseMenu(result.dinner, 'dinner'));
+  while (objMainArr.length < 2) {
+    objArr.push(parseMenu(result.breakfast, 'breakfast'));
+    objArr.push(parseMenu(result.brunch, 'brunch'));
+    objArr.push(parseMenu(result.lunch, 'lunch'));
+    objArr.push(parseMenu(result.snack, 'snack'));
+    objArr.push(parseMenu(result.dinner, 'dinner'));
+    objMainArr.push(objArr);
+    objArr = [];
+  }
 
-  return objArr;
+  return objMainArr;
 }
 
 function parseMenu(menu, name) {

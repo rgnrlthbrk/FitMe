@@ -6,8 +6,9 @@ let FoodData    = require('./../models/fooddata.model'),
 
 module.exports = {
   addFood:                addFood,
-  addUserMenuToday:       addUserMenuToday,
-  getUserMealToday:       getUserMealToday,
+  addUserMenu:            addUserMenu,
+  getUserMealTomorrow:    getUserMealTomorrow,
+  getUserMenuToday:       getUserMealToday,
   addUnparsedUserMenuArr: addUnparsedUserMenuArr,
   getUnparsedUserMenuArr: getUnparsedUserMenuArr
 };
@@ -111,7 +112,7 @@ function addUnparsedUserMenuArr(userMenu) {
   return deferred.promise;
 }
 
-function addUserMenuToday(id) {
+function addUserMenu(id) {
   let tmpUserData;
   userRequest
     .getSingleUserData(id)
@@ -139,9 +140,13 @@ function addUserMenuToday(id) {
         console.log('No parsedMenu data! Return null!');
         return null;
       } else {
+        console.log('parsedMenu: ');
+        console.log(parsedMenu);
         if (tmpUserData.food_menu) {
+          console.log('menu');
           userRequest.handleUserDataFoodMenu(tmpUserData, parsedMenu);
         } else {
+          console.log('new');
           userRequest.handleUserDataFoodMenuNew(tmpUserData, parsedMenu);
         }
       }
@@ -151,6 +156,32 @@ function addUserMenuToday(id) {
     });
 }
 
+function getUserMealTomorrow(username) {
+  let deferred = Q.defer();
+  userRequest
+    .getSingleUserByName(username)
+    .then((user) => {
+      if (!user) {
+        console.log('null user!');
+      } else {
+        return userRequest.getSingleUserData(user.user_data);
+      }
+    })
+    .then((userData) => {
+      if (!userData) {
+        console.log('null user data!');
+        deferred.resolve(null);
+      } else {
+        console.log('userData11: ' + userData);
+        deferred.resolve(userData.food_menu);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return deferred.promise;
+}
+
 function getUserMealToday(username) {
   let deferred = Q.defer();
   userRequest
@@ -158,9 +189,17 @@ function getUserMealToday(username) {
     .then((user) => {
       if (!user) {
         console.log('null user!');
+      } else {
+        return userRequest.getSingleUserData(user.user_data);
+      }
+    })
+    .then((userData) => {
+      if (!userData) {
+        console.log('null user data!');
         deferred.resolve(null);
       } else {
-        deferred.resolve(userRequest.getSingleUserData(id).food_menu);
+        console.log('userData11: ' + userData);
+        deferred.resolve(userData.food_menu_past[userData.food_menu_past.length - 1]);
       }
     })
     .catch((err) => {
