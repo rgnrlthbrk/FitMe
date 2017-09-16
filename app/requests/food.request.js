@@ -140,8 +140,6 @@ function addUserMenu(id) {
         console.log('No parsedMenu data! Return null!');
         return null;
       } else {
-        console.log('parsedMenu: ');
-        console.log(parsedMenu);
         if (tmpUserData.food_menu) {
           console.log('menu');
           userRequest.handleUserDataFoodMenu(tmpUserData, parsedMenu);
@@ -172,7 +170,6 @@ function getUserMealTomorrow(username) {
         console.log('null user data!');
         deferred.resolve(null);
       } else {
-        console.log('userData11: ' + userData);
         deferred.resolve(userData.food_menu);
       }
     })
@@ -198,7 +195,6 @@ function getUserMealToday(username) {
         console.log('null user data!');
         deferred.resolve(null);
       } else {
-        console.log('userData11: ' + userData);
         deferred.resolve(userData.food_menu_past[userData.food_menu_past.length - 1]);
       }
     })

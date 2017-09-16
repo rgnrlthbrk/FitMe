@@ -38,9 +38,18 @@ function parseMenu(menu, name) {
     let arr = menu;
     let randomIndex = Math.floor(Math.random() * arr.length);
     obj['name'] = name;
-    obj['first'] = convertReadableMeal(arr[randomIndex].first);
-    obj['second'] = convertReadableMeal(arr[randomIndex].second);
-    obj['drink'] = convertReadableMeal(arr[randomIndex].drink);
+    let first = arr[randomIndex].first;
+    obj['first'] = convertReadableMeal(first);
+    let second = arr[randomIndex].second;
+    obj['second'] = convertReadableMeal(second);
+    let drink = arr[randomIndex].drink;
+    obj['drink'] = convertReadableMeal(drink);
+
+    obj['imgArr'] = [
+      (first.subMeal)? first.subMeal.image : null,
+      (second.subMeal)? second.subMeal.image : null,
+      (drink.subMeal)? drink.subMeal.image : null,
+    ]
   }
   return obj;
 }

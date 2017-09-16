@@ -129,7 +129,6 @@ module.exports = {
           console.log('No update!');
           deferred.resolve(null);
         } else {
-          console.log('STATUS: ' + status);
           deferred.resolve(status);
         }
       }
