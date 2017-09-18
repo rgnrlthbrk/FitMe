@@ -16,8 +16,8 @@ let unauthorizedPathsArr = [
   , '/fitme'
   , '/notfound'
   //,'/user'
-  //,'/user/:username'
   //,'/user/:username/today'
+  //,'/user/today'
 ];
 
 router.use(routeUtil.unless(unauthorizedPathsArr, authCtrl.verifyToken));
@@ -46,8 +46,11 @@ router.route('/user/:username')
 router.route('/user/:username/today')
   .get(foodCtrl.getUserMenuToday);
 
-router.route('/user/:username/tomorrow')
+router.route('/tomorrowMenu')
   .get(foodCtrl.getUserMenuTomorrow);
+
+router.route('/tomorrowMenu')
+  .put(foodCtrl.updateUserMenuTomorrow);
 
 // mainCtrl
 router.route('/fitme')

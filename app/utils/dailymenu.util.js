@@ -43,7 +43,7 @@ function parseMenu(menu, name) {
     let second = arr[randomIndex].second;
     obj['second'] = convertReadableMeal(second);
     let drink = arr[randomIndex].drink;
-    obj['drink'] = convertReadableMeal(drink);
+    obj['drink'] = convertReadableDrink(drink);
 
     obj['imgArr'] = [
       (first.subMeal)? first.subMeal.image : null,
@@ -61,9 +61,35 @@ function convertReadableMeal(obj) {
   let mealStr = '';
   let a = {'0.25': 'quarter', '0.5': 'half', '0.75': '3/4'};
   if (typeOfQuantity.indexOf('ml') !== -1) {
-    mealStr = obj.count * 100 + 'ml' + ' of fresh ' + obj.subMeal.name + '; calories: ' + obj.calories;
+    mealStr = obj.count * 100 + 'ml' + ' of fresh ' + obj.subMeal.name + ' containing ' + obj.calories+ ' calories';
   } else if (typeOfQuantity.indexOf('g') !== -1) {
-    mealStr = obj.count * 100 + 'g' + ' of ' + obj.subMeal.name + '; calories: ' + obj.calories;
+    mealStr = obj.count * 100 + 'g' + ' of ' + obj.subMeal.name + ' containing ' + obj.calories+ ' calories';
+  } else {
+    let fraction = obj.count % 1;
+    let number = '';
+    if (a['' + fraction]) {
+      if (Math.floor(obj.count)) {
+        number = Math.floor(obj.count) + ' and a ' + a['' + fraction];
+      } else {
+        number = a['' + fraction];
+      }
+    }
+    mealStr = number + ' ' + obj.subMeal.name + ' containing ' + obj.calories+ ' calories';
+  }
+  return mealStr;
+}
+
+
+function convertReadableDrink(obj) {
+  // 3 types of quantity: ml, g and 1
+  if (!obj.subMeal) return null;
+  let typeOfQuantity = obj.subMeal.quantity;
+  let mealStr = '';
+  let a = {'0.25': 'quarter', '0.5': 'half', '0.75': '3/4'};
+  if (typeOfQuantity.indexOf('ml') !== -1) {
+    mealStr = obj.count * 100 + 'ml' + ' of fresh ' + obj.subMeal.name;
+  } else if (typeOfQuantity.indexOf('g') !== -1) {
+    mealStr = obj.count * 100 + 'g' + ' of ' + obj.subMeal.name;
   } else {
     let fraction = obj.count % 1;
     let number = '';
@@ -73,7 +99,7 @@ function convertReadableMeal(obj) {
       }
       number = a['' + fraction];
     }
-    mealStr = number + ' ' + obj.subMeal.name + '; calories: ' + obj.calories;
+    mealStr = number + ' ' + obj.subMeal.name;
   }
   return mealStr;
 }

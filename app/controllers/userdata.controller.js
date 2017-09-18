@@ -62,23 +62,38 @@ module.exports = {
   },
   editUserData:   (req, res) => {
     const username = req.body.username || req.header('username');
-    UserData.findOneAndUpdate({
-        username: username
-      },
-      {
-        $set: request(req, username)
-      },
-      {upsert: true},
-      (err) => {
-        if (err) {
-          res.status(403).send(err);
-        } else {
-          res.status(200).send({
-            success: true,
-            message: 'User data updated correctly!'
-          });
-        }
+    userRequest
+      .getSingleUserByName(username)
+      .then((user) => {
+          if(!user) {
+            return null;
+          } else {
+            UserData.findOneAndUpdate({
+                _id: user.user_data
+              },
+              {
+                $set: request(req, username)
+              },
+              {upsert: true},
+              (err) => {
+                if (err) {
+                  res.status(403).send(err);
+                } else {
+                  res.status(200).send({
+                    success: true,
+                    message: 'User data updated correctly!'
+                  });
+                }
+              });
+          }
+      })
+      .catch(() => {
+        return res.status(403).send({
+          success: false,
+          message: 'Some error message.'
+        });
       });
+
   },
   submitUserData: (req, res) => {
     const username = req.body.username || req.header('username');
@@ -171,7 +186,6 @@ function checkPassword(req, res) {
 
 function request(req, username) {
   let object = {};
-  object['username'] = username;
   for (let key in req.body) {
     if (req.body.hasOwnProperty(key)) {
       if ('token' !== key || 'username' !== key) {

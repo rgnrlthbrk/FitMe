@@ -10,7 +10,8 @@ module.exports = {
   getUserMealTomorrow:    getUserMealTomorrow,
   getUserMenuToday:       getUserMealToday,
   addUnparsedUserMenuArr: addUnparsedUserMenuArr,
-  getUnparsedUserMenuArr: getUnparsedUserMenuArr
+  getUnparsedUserMenuArr: getUnparsedUserMenuArr,
+  updateUserMealTomorrow: updateUserMealTomorrow
 };
 
 function addFood(req, res) {
@@ -171,6 +172,34 @@ function getUserMealTomorrow(username) {
         deferred.resolve(null);
       } else {
         deferred.resolve(userData.food_menu);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return deferred.promise;
+}
+
+function updateUserMealTomorrow(username, body) {
+  let deferred = Q.defer();
+  userRequest
+    .getSingleUserByName(username)
+    .then((user) => {
+      if (!user) {
+        console.log('null user!');
+      } else {
+        return userRequest.getSingleUserData(user.user_data);
+      }
+    })
+    .then((userData) => {
+      if (!userData) {
+        console.log('null user data!');
+        deferred.resolve(null);
+      } else {
+        console.log('body');
+        console.log(body);
+        userRequest.updateUserDataFoodMenu(userData, body);
+        deferred.resolve(body);
       }
     })
     .catch((err) => {
