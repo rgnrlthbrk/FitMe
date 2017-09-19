@@ -14,10 +14,12 @@ let unauthorizedPathsArr = [
   , '/logout'
   , '/registration'
   , '/fitme'
+  , '/img/cutting_board'
   , '/notfound'
+  // The routes bellow need token authentication
   //,'/user'
   //,'/user/:username/today'
-  //,'/user/today'
+  //,'/tomorrowMenu'
 ];
 
 router.use(routeUtil.unless(unauthorizedPathsArr, authCtrl.verifyToken));
@@ -55,6 +57,9 @@ router.route('/tomorrowMenu')
 // mainCtrl
 router.route('/fitme')
   .get(mainCtrl.getFitme);
+
+router.route('/img/cutting_board')
+  .get(mainCtrl.getCuttingBoard);
 
 router.route('*')
   .get(mainCtrl.getAll);

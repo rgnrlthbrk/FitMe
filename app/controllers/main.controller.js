@@ -7,5 +7,8 @@ module.exports = {
   },
   getFitme : (req, res) => {
     res.sendFile(path.resolve(__dirname + './../../files/fitme.png'));
+  },
+  getCuttingBoard : (req, res) => {
+    res.sendFile(path.resolve(__dirname + './../../files/cutting_board.png'));
   }
 };

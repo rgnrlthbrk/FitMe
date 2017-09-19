@@ -65,27 +65,33 @@ module.exports = {
     userRequest
       .getSingleUserByName(username)
       .then((user) => {
-          if(!user) {
-            return null;
-          } else {
-            UserData.findOneAndUpdate({
-                _id: user.user_data
-              },
-              {
-                $set: request(req, username)
-              },
-              {upsert: true},
-              (err) => {
-                if (err) {
-                  res.status(403).send(err);
-                } else {
-                  res.status(200).send({
-                    success: true,
-                    message: 'User data updated correctly!'
-                  });
-                }
-              });
-          }
+        if (!user) {
+          return null;
+        } else {
+          UserData.findOneAndUpdate({
+              _id: user.user_data
+            },
+            {
+              $set: request(req, username)
+            },
+            {upsert: true},
+            (err) => {
+              if (err) {
+                res.status(403).send(err);
+              } else {
+                res.status(200).send({
+                  success: true,
+                  message: 'User data updated correctly!'
+                });
+              }
+            });
+        }
+      })
+      .then((user) => {
+        userCalories.generateSingleUserDailyCalories(username)
+          .then(() => {
+            menuCtrl.generateMenuUser(username);
+          });
       })
       .catch(() => {
         return res.status(403).send({
