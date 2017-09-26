@@ -7,6 +7,7 @@ let router = require('express').Router(),
 
 module.exports = router;
 
+// paths, which need no authorisation
 let unauthorizedPathsArr = [
   ''
   , '/home'

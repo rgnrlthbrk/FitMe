@@ -72,7 +72,7 @@ module.exports = {
               _id: user.user_data
             },
             {
-              $set: request(req, username)
+              $set: request(req)
             },
             {upsert: true},
             (err) => {
@@ -190,7 +190,7 @@ function checkPassword(req, res) {
   });
 }
 
-function request(req, username) {
+function request(req) {
   let object = {};
   for (let key in req.body) {
     if (req.body.hasOwnProperty(key)) {

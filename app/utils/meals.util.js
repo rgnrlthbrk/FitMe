@@ -135,7 +135,6 @@ module.exports = {
 };
 
 function generateCustomMeal(pattern1, pattern2, pattern3, calories, foods) {
-
   let first = generateSubMeal(foods, pattern1);
   let second = generateSubMeal(foods, pattern2);
   let drink = (pattern3) ? generateDrink(foods) : null;

@@ -18,7 +18,6 @@ function compare(first, second, drink, calories) {
       }
     }
   }
-
   return arr;
 }
 
@@ -82,7 +81,7 @@ function toMeal(left, right, drink) {
   mealObj.first = {subMeal: left, count: left.count, calories: left.count * left.calories};
   mealObj.second = {subMeal: right, count: right.count, calories: right.count * right.calories};
   mealObj.drink = {subMeal: drink, count: 0, calories: 0};
-  if (drink) {
+    if (drink) {
     mealObj.drink.subMeal = drink[Math.floor((Math.random() * 5) + 1)];
     mealObj.drink.count = 1;
   }

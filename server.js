@@ -10,7 +10,6 @@ let express = require('express'),
     app     = express(),
     morgan  = require('morgan');
 app.set('superSecret', process.env.SECRET);
-
 app.use(morgan('dev'));
 
 let bodyParser = require('body-parser');

@@ -9,18 +9,18 @@ module.exports = {
 };
 
 function getCaloriesMen(userData) {
-  let RMR = 66 + (13.7 * parseInt(userData.kilos))
+  let BMR = 66 + (13.7 * parseInt(userData.kilos))
                + (5 * parseInt(userData.height))
                - (6.8 * parseInt(userData.age));
-  let AC = RMR * activityPeriod[userData.activityPeriod];
+  let AC = BMR * activityPeriod[userData.activityPeriod];
   return getTypeOfDiet(userData.goals, AC);
 }
 
 function getCaloriesWomen(userData) {
-  let RMR = 655 + (9.6 * parseInt(userData.kilos))
+  let BMR = 655 + (9.6 * parseInt(userData.kilos))
                 + (1.8 * parseInt(userData.height))
                 - (4.7 * parseInt(userData.age));
-  let AC = RMR * activityPeriod[userData.activityPeriod];
+  let AC = BMR * activityPeriod[userData.activityPeriod];
   return getTypeOfDiet(userData.goals, AC);
 }
 
